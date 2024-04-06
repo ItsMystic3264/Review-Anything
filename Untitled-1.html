@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Anything</title>
+  <link rel="stylesheet" href="c:\Users\1WNBV\css.css">
+</head>
+<body>
+    <header>
+      <h1>Review Anything</h1>
+      <form id="searchForm" class="search-form">
+        <input type="text" id="search" name="search" placeholder="Search reviews...">
+        <button type="submit">Search</button>
+      </form>      
+    </header>
+    
+    <main>
+        <button id="openReviewFormButton" class="open-review-form-button">Write A Review</button>
+    
+        <!-- Review Form Container -->
+        <div id="reviewFormContainer" class="review-form-container">
+          <h2>Write A Review</h2>
+          <form id="reviewForm">
+            <div class="form-group">
+              <label for="reviewing">What Are You Reviewing?</label>
+              <input type="text" id="reviewing" name="reviewing" required>
+            </div>
+            <div class="form-group">
+              <label for="rating">Rating (1-10):</label>
+              <input type="number" id="rating" name="rating" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+              <label for="comment">Comments (optional):</label>
+              <textarea id="comment" name="comment" rows="4"></textarea>
+            </div>
+            <button type="submit" class="button">Submit Review</button>
+          </form>
+        </div>
+      
+      <section class="reviews-list">
+        <h2>Reviews</h2>
+        <ul id="reviews"></ul>
+      </section>
+    </main>
+
+  <script src="c:\Users\1WNBV\JS.js" defer></script>
+</body>
+</html>
