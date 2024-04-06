@@ -4,7 +4,122 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Review Anything</title>
-  <link rel="stylesheet" href="c:\Users\1WNBV\css.css">
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  
+  .review-form {
+    margin-bottom: 40px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  .reviews-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .review-item {
+    border-bottom: 1px solid #ccc;
+    padding: 20px 0;
+  }
+  
+  .review-item:last-child {
+    border-bottom: none;
+  }
+  .search-form {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .search-form input[type="text"] {
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  .search-form button {
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+  
+  .open-review-form-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .review-form-container {
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 20px;
+    z-index: 999;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+  }
+  
+  .review-form-container h2 {
+    margin-top: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  textarea {
+    resize: none; /* Disables resizing */
+  }
+  
+  </style>
 </head>
 <body>
     <header>
@@ -44,6 +159,152 @@
       </section>
     </main>
 
-  <script src="c:\Users\1WNBV\JS.js" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const openReviewFormButton = document.getElementById('openReviewFormButton');
+    const reviewFormContainer = document.getElementById('reviewFormContainer');
+    const reviewForm = document.getElementById('reviewForm');
+  
+    openReviewFormButton.addEventListener('click', function () {
+      // Show review form elements
+      reviewFormContainer.style.display = 'block';
+    });
+  
+    reviewForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+  
+      // Hide review form elements
+      reviewFormContainer.style.display = 'none';
+  
+      // Process form submission (save review, display review, etc.)
+      // Add your code here
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const reviewForm = document.getElementById('reviewForm');
+    const reviewsList = document.getElementById('reviews');
+    const searchForm = document.getElementById('searchForm');
+    const reviewsHeading = document.getElementById('reviewsHeading');
+    const resetStoragePassword = '01062010'; // Change this to your desired password
+  
+    // Display existing reviews when the page loads
+    displayExistingReviews();
+  
+    reviewForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      
+      const reviewing = this.reviewing.value;
+      const rating = this.rating.value;
+      const comment = this.comment.value;
+  
+      // Validate inputs
+      if (!reviewing || !rating) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+  
+      // Create review object
+      const review = {
+        reviewing: reviewing,
+        rating: rating,
+        comment: comment
+      };
+  
+      // Add review to localStorage
+      saveReview(review);
+  
+      // Display review on the page
+      displayReview(review);
+  
+      // Clear form inputs
+      reviewForm.reset();
+    });
+  
+    searchForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+  
+      const searchTerm = this.search.value.trim().toLowerCase();
+  
+      if (searchTerm === '') {
+        alert('Please enter a search term.');
+        return;
+      }
+  
+      // Clear previous search results
+      clearSearchResults();
+  
+      // Search for reviews matching the search term
+      const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      const matchingReviews = reviews.filter(review => review.reviewing.toLowerCase().includes(searchTerm));
+  
+      if (matchingReviews.length === 0) {
+        alert('No reviews found matching the search term.');
+        return;
+      }
+  
+      // Display matching reviews
+      matchingReviews.forEach(review => {
+        displayReview(review);
+      });
+  
+      // Change the reviews heading text
+      reviewsHeading.textContent = 'Searched Reviews';
+    });
+  
+    function saveReview(review) {
+      let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      reviews.push(review);
+      localStorage.setItem('reviews', JSON.stringify(reviews));
+    }
+  
+    function displayReview(review) {
+      // Create review item
+      const reviewItem = document.createElement('li');
+      reviewItem.classList.add('review-item');
+      let reviewContent = `<strong>${review.reviewing}</strong> - ${review.rating}/10`;
+      if (review.comment.trim() !== '') {
+        reviewContent += `<br><p>${review.comment}</p>`;
+      }
+      reviewItem.innerHTML = reviewContent;
+  
+      // Append review item to the list
+      reviewsList.insertBefore(reviewItem, reviewsList.firstChild);
+    }
+  
+    function displayExistingReviews() {
+      const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      reviews.forEach(review => {
+        displayReview(review);
+      });
+    }
+  
+    function clearSearchResults() {
+      while (reviewsList.firstChild) {
+        reviewsList.removeChild(reviewsList.firstChild);
+      }
+    }
+  
+    function resetStorage() {
+      const userInput = prompt('To reset the storage, please enter the password:');
+      if (userInput === resetStoragePassword) {
+        localStorage.removeItem('reviews');
+        reviewsList.innerHTML = ''; // Clear the reviews displayed on the page
+        alert('Local storage has been reset successfully.');
+      } else {
+        alert('Incorrect password. Local storage reset canceled.');
+      }
+    }
+  
+    // Listen for keydown events to detect key combination
+    document.addEventListener('keydown', function(event) {
+      if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+        // Reset storage when Ctrl + Shift + R is pressed
+        resetStorage();
+      }
+    });
+  });
+
+  </script>
 </body>
 </html>
